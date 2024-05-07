@@ -41,7 +41,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Победил - ${sessionScope.winner}</h1>
+    <h1>${sessionScope.winner}</h1>
     <button class="restart-btn" onclick="window.location='/tic_tac_war/start'">Начать новую игру</button>
 </div>
 </body>

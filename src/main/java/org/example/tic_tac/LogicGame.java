@@ -58,11 +58,10 @@ public class LogicGame  extends HttpServlet{
     private boolean checkWin(HttpServletResponse response, HttpSession currentSession, Field field) throws IOException {
         Sign winner = field.checkWin();
         if(winner == Sign.CROSS || winner == Sign.NOUGHT){
-            currentSession.setAttribute("winner", winner);
+            currentSession.setAttribute("winner","Победил - " + winner);
             List<Sign> data = field.getFieldData();
             currentSession.setAttribute("data", data);
             response.sendRedirect("/tic_tac_war/winner.jsp");
-            System.out.println("Winner is " + winner);
             return true;
         }
         return false;
