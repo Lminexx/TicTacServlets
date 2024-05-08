@@ -1,5 +1,6 @@
 package org.example.tic_tac;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,16 @@ import java.util.stream.Collectors;
 
 public class Field {
     private final Map<Integer, Sign> field;
+    private final List<List<Integer>> winPossibilities = List.of(
+            List.of(0, 1, 2),
+            List.of(0, 4, 8),
+            List.of(2, 4, 6),
+            List.of(3, 4, 5),
+            List.of(6, 7, 8),
+            List.of(0, 3, 6),
+            List.of(1, 4, 7),
+            List.of(2, 5, 8)
+    );
 
     public Field() {
         field = new HashMap<>();
@@ -25,12 +36,6 @@ public class Field {
         return field;
     }
 
-    public int getEmptyFieldIndex() {
-        return field.entrySet().stream()
-                .filter(e -> e.getValue() == Sign.EMPTY)
-                .map(Map.Entry::getKey)
-                .findFirst().orElse(-1);
-    }
 
     public List<Sign> getFieldData() {
         return field.entrySet().stream()
@@ -38,19 +43,37 @@ public class Field {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }
+    public int getEmptyFieldIndex() {
+        return field.entrySet().stream()
+                .filter(e -> e.getValue() == Sign.EMPTY)
+                .map(Map.Entry::getKey)
+                .findFirst().orElse(-1);
+    }
+    public int getWinningPosition() {
+        for (var win : winPossibilities) {
+            int emptyCount = 0;
+            List<Integer> array = new ArrayList<>();
+            for (int index : win) {
+                if (field.get(index) == Sign.EMPTY || field.get(index) == Sign.NOUGHT) {
+                    if(field.get(index) == Sign.EMPTY) {
+                        array.add(index);
+                    }
+                    emptyCount++;
+                } else {
+                    break;
+                }
+            }
+            if (emptyCount == 3) {
+                return array.get(0);
+            }
+        }
+        return getEmptyFieldIndex();
+    }
+
+
+
 
     public Sign checkWin() {
-        List<List<Integer>> winPossibilities = List.of(
-                List.of(0, 1, 2),
-                List.of(3, 4, 5),
-                List.of(6, 7, 8),
-                List.of(0, 3, 6),
-                List.of(1, 4, 7),
-                List.of(2, 5, 8),
-                List.of(0, 4, 8),
-                List.of(2, 4, 6)
-        );
-
         for (List<Integer> winPossibility : winPossibilities) {
             if (field.get(winPossibility.get(0)) == field.get(winPossibility.get(1))
                     && field.get(winPossibility.get(0)) == field.get(winPossibility.get(2))) {

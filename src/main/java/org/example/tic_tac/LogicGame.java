@@ -27,7 +27,7 @@ public class LogicGame  extends HttpServlet{
             return;
         }
         //нолик
-        int freeIndex = field.getEmptyFieldIndex();
+        int freeIndex = field.getWinningPosition();
         if(freeIndex >=0){
             field.getField().put(freeIndex, Sign.NOUGHT);
             if(checkWin(resp, currentSession, field) || draw(field, currentSession , resp)){
