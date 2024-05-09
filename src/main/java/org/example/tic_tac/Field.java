@@ -1,23 +1,24 @@
 package org.example.tic_tac;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Field {
     private final Map<Integer, Sign> field;
-    private final List<List<Integer>> winPossibilities = List.of(
-            List.of(0, 1, 2),
+    private final List<List<Integer>> winPossibilities = new ArrayList<>(List.of(
             List.of(0, 4, 8),
             List.of(2, 4, 6),
             List.of(3, 4, 5),
+            List.of(0, 1, 2),
             List.of(6, 7, 8),
             List.of(0, 3, 6),
             List.of(1, 4, 7),
             List.of(2, 5, 8)
-    );
+    ));
+
+    public void setField(Integer index, Sign sign) {
+        field.put(index, sign);
+    }
 
     public Field() {
         field = new HashMap<>();
@@ -49,7 +50,9 @@ public class Field {
                 .map(Map.Entry::getKey)
                 .findFirst().orElse(-1);
     }
+
     public int getWinningPosition() {
+        Collections.shuffle(winPossibilities);
         for (var win : winPossibilities) {
             int emptyCount = 0;
             List<Integer> array = new ArrayList<>();
@@ -69,10 +72,6 @@ public class Field {
         }
         return getEmptyFieldIndex();
     }
-
-
-
-
     public Sign checkWin() {
         for (List<Integer> winPossibility : winPossibilities) {
             if (field.get(winPossibility.get(0)) == field.get(winPossibility.get(1))
